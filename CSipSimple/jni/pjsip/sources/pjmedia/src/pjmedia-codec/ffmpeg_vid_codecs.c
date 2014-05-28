@@ -366,7 +366,8 @@ static pj_status_t h264_preopen(ffmpeg_private *ff)
 	return PJ_ENOTSUP;
     }
     /* Better always send in single NAL mode for better compatibility */
-    pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_SINGLE_NAL;
+   // pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_SINGLE_NAL;
+    pktz_cfg.mode = PJMEDIA_H264_PACKETIZER_MODE_NON_INTERLEAVED;
 #endif
 
     status = pjmedia_h264_packetizer_create(ff->pool, &pktz_cfg, &data->pktz);
