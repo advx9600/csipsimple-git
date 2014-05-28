@@ -22081,6 +22081,18 @@ SWIGEXPORT jint JNICALL Java_org_pjsip_pjsua_pjsuaJNI_call_1secure_1sig_1level(J
   return jresult;
 }
 
+SWIGEXPORT jlong JNICALL Java_org_pjsip_pjsua_pjsuaJNI_get_1rx_1data_1is_1dm365(JNIEnv *jenv, jlong jarg2) {
+  int i;
+  const char * comStr=(const char*)"s=doormachine";
+//  const char * comStr=(const char*)"s=pjmedia";
+  pjsip_rx_data *ptr = (pjsip_rx_data *) jarg2 ;
+  for (i=0;i<ptr->msg_info.len-strlen(comStr);i++)
+  {
+    if(!strncmp(&ptr->msg_info.msg_buf[i],comStr,strlen(comStr)))
+        return 1;
+  }
+  return 0;
+}
 
 SWIGEXPORT jlong JNICALL Java_org_pjsip_pjsua_pjsuaJNI_get_1error_1message(JNIEnv *jenv, jclass jcls, jint jarg1) {
   jlong jresult = 0 ;
@@ -24134,6 +24146,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
 {"call_dump__SWIG_1", "(IILjava/lang/String;)J", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_call_1dump_1_1SWIG_11},
 {"call_secure_media_info", "(I)J", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_call_1secure_1media_1info},
 {"call_secure_sig_level", "(I)I", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_call_1secure_1sig_1level},
+{"get_rx_data_is_dm365", "(J)J", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_get_1rx_1data_1is_1dm365},
 {"get_error_message", "(I)J", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_get_1error_1message},
 {"get_event_status_code", "(JLorg/pjsip/pjsua/pjsip_event;)I", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_get_1event_1status_1code},
 {"get_event_reason_code", "(JLorg/pjsip/pjsua/pjsip_event;)I", (void*)& Java_org_pjsip_pjsua_pjsuaJNI_get_1event_1reason_1code},
