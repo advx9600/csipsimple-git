@@ -76,12 +76,13 @@ FLAGS="$FLAGS --enable-runtime-cpudetect"
 FLAGS="$FLAGS --enable-decoder=h263 --enable-encoder=h263"
 
 #For x264
+FLAGS="$FLAGS --enable-encoder=libxa8264"
 FLAGS="$FLAGS --enable-encoder=libx264 --enable-parser=h264"
 FLAGS="$FLAGS --enable-libx264"
 if [ $USE_STAGEFRIGHT -eq 1 ]; then
 FLAGS="$FLAGS --enable-libstagefright-h264 --enable-decoder=libstagefright_h264"
 else
-FLAGS="$FLAGS --enable-decoder=h264"
+FLAGS="$FLAGS --enable-decoder=h264 --enable-decoder=h264_a8"
 fi
 
 X264_LIBS=../build/x264/$TARGET_ARCH_ABI/lib

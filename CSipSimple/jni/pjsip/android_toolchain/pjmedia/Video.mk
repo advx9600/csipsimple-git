@@ -59,7 +59,8 @@ BASE_FFMPEG_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/ffmpeg/$(TARGET_AR
 LOCAL_LDLIBS += $(BASE_FFMPEG_BUILD_DIR)/libavcodec.a \
 		$(BASE_FFMPEG_BUILD_DIR)/libavformat.a \
 		$(BASE_FFMPEG_BUILD_DIR)/libswscale.a \
-		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a
+		$(BASE_FFMPEG_BUILD_DIR)/libavutil.a \
+		$(BASE_FFMPEG_BUILD_DIR)/libseccsc.a
 
 # Add X264	
 BASE_X264_BUILD_DIR :=  $(LOCAL_PATH)/../../../ffmpeg/build/x264/$(TARGET_ARCH_ABI)/lib
