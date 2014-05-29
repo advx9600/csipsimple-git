@@ -225,7 +225,8 @@ public class Ringer {
                 Message msg = ringerWorker.obtainMessage(RingWorkerHandler.PROGRESS_RING);
                 msg.arg1 = RingWorkerHandler.PROGRESS_RING;
                 Log.d(THIS_FILE, "Starting ringer...");
-                audioManager.setMode(AudioManager.MODE_RINGTONE);
+                //audioManager.setMode(AudioManager.MODE_RINGTONE);
+                audioManager.setMode(AudioManager.MODE_NORMAL);
                 ringerWorker.sendMessage(msg);
             }
         }
