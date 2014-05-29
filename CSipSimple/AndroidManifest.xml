@@ -535,7 +535,11 @@
             android:name="com.csipsimple.db.DBProvider"
             android:authorities="com.csipsimple.db"
             android:permission="android.permission.CONFIGURE_SIP"
-            android:process=":sipStack" />
+            android:process=":sipStack" />        
+        <provider
+            android:name="com.csipsimple.service.MissedInfoProvider"
+            android:authorities="com.csipsimple.missedinfo"
+            android:permission="android.permission.CONFIGURE_SIP" />
 
         <!-- New UI -->
         <activity
