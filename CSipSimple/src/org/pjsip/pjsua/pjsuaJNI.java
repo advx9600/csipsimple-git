@@ -1327,6 +1327,7 @@ public class pjsuaJNI {
   public final static native int vid_set_android_capturer(Object jarg1);
   public final static native int set_turn_credentials(long jarg1, pj_str_t jarg1_, long jarg2, pj_str_t jarg2_, long jarg3, pj_str_t jarg3_, long jarg4);
   public final static native long get_rx_data_header(long jarg1, pj_str_t jarg1_, long jarg2);
+  public final static native long get_rx_data_is_dm365(long jarg2);
   public final static native void css_on_call_state(int jarg1, long jarg2, pjsip_event jarg2_);
   public final static native void css_on_call_media_state(int jarg1);
   public final static native void zrtp_state_info_call_id_set(long jarg1, zrtp_state_info jarg1_, int jarg2);

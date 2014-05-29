@@ -868,6 +868,11 @@ public class pjsua implements pjsuaConstants {
     return pjsuaJNI.set_turn_credentials(pj_str_t.getCPtr(username), username, pj_str_t.getCPtr(password), password, pj_str_t.getCPtr(realm), realm, SWIGTYPE_p_pj_stun_auth_cred.getCPtr(turn_auth_cred));
   }
 
+  public static long get_rx_data_is_dm365(SWIGTYPE_p_pjsip_rx_data data) {
+		return pjsuaJNI.get_rx_data_is_dm365(SWIGTYPE_p_pjsip_rx_data
+				.getCPtr(data));
+	}
+  
   public static pj_str_t get_rx_data_header(pj_str_t name, SWIGTYPE_p_pjsip_rx_data data) {
     return new pj_str_t(pjsuaJNI.get_rx_data_header(pj_str_t.getCPtr(name), name, SWIGTYPE_p_pjsip_rx_data.getCPtr(data)), true);
   }
