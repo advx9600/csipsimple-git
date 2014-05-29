@@ -1,2 +1,9 @@
 *.properties
 *.classpath
+*.o
+*.a
+*.so
+*.o.d
+*.err
+*/bin/
+*.project
