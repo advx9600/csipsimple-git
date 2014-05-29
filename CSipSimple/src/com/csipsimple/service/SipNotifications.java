@@ -24,10 +24,12 @@ package com.csipsimple.service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.provider.CallLog;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
@@ -73,6 +75,8 @@ public class SipNotifications {
 	public static final int VOICEMAIL_NOTIF_ID = REGISTER_NOTIF_ID + 4;
 
 	private static boolean isInit = false;
+	
+	public static final String NEW_LIFEFORM_DETECTED = "com.csipsimple.Notification.SipNotifications.broadcast";
 
 	public SipNotifications(Context aContext) {
 		context = aContext;
@@ -356,6 +360,7 @@ public class SipNotifications {
 		missedCallNotification.setContentIntent(contentIntent);
 		
 		notificationManager.notify(CALLLOG_NOTIF_ID, missedCallNotification.build());
+		sendMissedCallBroadcast(1);
 	}
 
 	public void showNotificationForMessage(SipMessage msg) {
@@ -391,6 +396,7 @@ public class SipNotifications {
 			messageNotification.setContentIntent(contentIntent);
 			
 			notificationManager.notify(MESSAGE_NOTIF_ID, messageNotification.build());
+			sendMissedMsgBroadcast(1);
 		}
 	}
 
@@ -473,10 +479,12 @@ public class SipNotifications {
 	}
 
 	public final void cancelMissedCalls() {
+		sendMissedCallBroadcast(0);
 		notificationManager.cancel(CALLLOG_NOTIF_ID);
 	}
 
 	public final void cancelMessages() {
+		sendMissedMsgBroadcast(0);
 		notificationManager.cancel(MESSAGE_NOTIF_ID);
 	}
 
@@ -484,15 +492,44 @@ public class SipNotifications {
 		notificationManager.cancel(VOICEMAIL_NOTIF_ID);
 	}
 
+	private void sendMissedCallBroadcast(int count) {
+		Intent intent = new Intent(NEW_LIFEFORM_DETECTED);
+
+		Uri uri = Uri
+				.parse("content://com.csipsimple.missedinfo/setMissedCallCount");
+		ContentResolver contentResolver = this.context.getContentResolver();
+		ContentValues conVal = new ContentValues();
+		conVal.put("missedCallCount", count);
+		contentResolver.update(uri, conVal, null, null);
+
+		context.sendBroadcast(intent);
+	}
+	private void sendMissedMsgBroadcast(int count) {
+		Intent intent = new Intent(NEW_LIFEFORM_DETECTED);
+
+		Uri uri = Uri
+				.parse("content://com.csipsimple.missedinfo/setMissedMsgCount");
+		ContentResolver contentResolver = this.context.getContentResolver();
+		ContentValues conVal = new ContentValues();
+		conVal.put("missedMsgCount", count);
+		contentResolver.update(uri, conVal, null, null);
+
+		context.sendBroadcast(intent);
+	}
+	
 	public final void cancelAll() {
 		// Do not cancel calls notification since it's possible that there is
 		// still an ongoing call.
 		if (isServiceWrapper) {
 			cancelRegisters();
 		}
-		cancelMessages();
-		cancelMissedCalls();
-		cancelVoicemails();
+		// when reboot not clean the missed information
+//		cancelMessages();
+//		cancelMissedCalls();
+//		cancelVoicemails();
+		notificationManager.cancel(CALLLOG_NOTIF_ID);
+		notificationManager.cancel(MESSAGE_NOTIF_ID);
+		notificationManager.cancel(VOICEMAIL_NOTIF_ID);
 	}
 
 }

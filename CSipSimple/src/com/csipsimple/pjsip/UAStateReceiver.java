@@ -97,7 +97,9 @@ public class UAStateReceiver extends Callback {
     private int mPreferedHeadsetAction;
     private boolean mAutoRecordCalls;
     private int mMicroSource;
-
+    
+    private boolean mIsDm365 = false;    
+	
     private void lockCpu() {
         if (eventLock != null) {
             Log.d(THIS_FILE, "< LOCK CPU");
@@ -172,8 +174,18 @@ public class UAStateReceiver extends Callback {
                 pjService.callAnswer(callId, shouldAutoAnswer);
             } else {
                 // Ring and inform remote about ringing with 180/RINGING
-                pjService.callAnswer(callId, 180);
-
+                //pjService.callAnswer(callId, 180);
+            	mIsDm365 = pjsua.get_rx_data_is_dm365(rdata) > 0 ? true : false;
+            	// mIsDm365 = true;
+            	Log.w(THIS_FILE, "set mIsDm365 true for debug");
+            	Log.w(THIS_FILE, "mIsDm365:" + mIsDm365
+            	+ ",if true set Answer 183");
+            	if (mIsDm365) {
+            	pjService.callAnswer(callId, 183);
+            	} else {
+            	pjService.callAnswer(callId, 180);
+            	}
+            	
                 if (pjService.mediaManager != null) {
                     if (pjService.service.getGSMCallState() == TelephonyManager.CALL_STATE_IDLE
                             && !hasOngoingSipCall) {

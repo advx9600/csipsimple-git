@@ -58,6 +58,7 @@ import com.csipsimple.R;
 import com.csipsimple.api.SipConfigManager;
 import com.csipsimple.api.SipManager;
 import com.csipsimple.api.SipProfile;
+import com.csipsimple.service.SipNotifications;
 import com.csipsimple.ui.account.AccountsEditList;
 import com.csipsimple.ui.calllog.CallLogListFragment;
 import com.csipsimple.ui.dialpad.DialerFragment;
@@ -393,6 +394,20 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
             if (fragment instanceof ViewPagerVisibilityListener) {
                 ((ViewPagerVisibilityListener) fragment).onVisibilityChanged(visibility);
             }
+            
+        	if (visibility) {
+        		SipNotifications nManager;
+        		switch (position) {
+        			case TAB_ID_CALL_LOG:
+        				nManager = new SipNotifications(this);
+        				nManager.cancelMissedCalls();
+        				break;
+        			case TAB_ID_MESSAGES:
+        				nManager = new SipNotifications(this);
+        				nManager.cancelMessages();
+        			break;
+        		}
+        	} 
         }catch(IllegalStateException e) {
             Log.e(THIS_FILE, "Fragment not anymore managed");
         }
