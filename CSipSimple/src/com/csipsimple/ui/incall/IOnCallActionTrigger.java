@@ -123,6 +123,10 @@ public interface IOnCallActionTrigger {
     int ZRTP_REVOKE = ZRTP_TRUST + 1;
     
     /**
+     * unlock
+     */
+    int SIP_UNLOCK = ZRTP_REVOKE + 1;
+    /**
      * Called when the user make an action
      * 
      * @param whichAction what action has been done

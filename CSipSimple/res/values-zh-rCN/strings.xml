@@ -88,5 +88,6 @@
     <string name="uri_nbr">电话号码</string>
     <string name="uri_im">自定义SIP协议的即时通讯</string>
     <string name="uri_sip">网络呼叫</string>
-
+	<!-- dafeng -->
+	<string name="unlock">开锁</string>
 </resources>
