@@ -4,6 +4,15 @@
 *.a
 *.so
 *.o.d
-*.err
+*.
+*.gradle
+*.bat
+*.jar
+gradlew
 */bin/
 *.project
+CSipSimple/jni/fdk_aac/sources
+CSipSimple/jni/ffmpeg/ffmpeg_src
+CSipSimple/jni/libvpx/sources
+CSipSimple/jni/openssl/sources
+CSipSimple/jni/opus/sources

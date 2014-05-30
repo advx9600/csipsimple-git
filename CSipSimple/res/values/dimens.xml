@@ -48,4 +48,7 @@
     <dimen name="message_item_text_padding_top">5dip</dimen>
     <dimen name="message_contact_photo_size">54dip</dimen>
 
+    
+     <dimen name="dafeng_dail_txt_width">800dip</dimen>
+     
 </resources>
