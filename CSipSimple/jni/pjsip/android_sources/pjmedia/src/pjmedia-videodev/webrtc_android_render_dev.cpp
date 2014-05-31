@@ -369,7 +369,7 @@ static pj_status_t webrtcR_stream_put_frame(pjmedia_vid_dev_stream *strm,
 
 	// TODO : shall we try to use frame timestamp?
 	WebRtc_Word64 nowMs = TickTime::MillisecondTimestamp();
-	stream->_videoFrame.SetRenderTime( nowMs + 400);
+	stream->_videoFrame.SetRenderTime( nowMs + 100);
     stream->_videoFrame.SetTimeStamp(frame->timestamp.u64/*nowMs*/);
 	stream->_renderProvider->RenderFrame(0, stream->_videoFrame);
 

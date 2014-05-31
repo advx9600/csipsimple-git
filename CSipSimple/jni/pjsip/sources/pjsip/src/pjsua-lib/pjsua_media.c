@@ -2771,6 +2771,9 @@ pj_status_t pjsua_media_channel_update(pjsua_call_id call_id,
 		continue;
 	    }
 
+	    /* room machine doesn't have a camera so recvonly */
+	    PJ_LOG(4,(THIS_FILE,"set video only to recv"));
+	    si->dir=PJMEDIA_DIR_DECODING; 
 	    /* Check if this media is changed */
 	    stream_info.type = PJMEDIA_TYPE_VIDEO;
 	    stream_info.info.vid = the_si;
