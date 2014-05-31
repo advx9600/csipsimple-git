@@ -102,6 +102,7 @@
         android:required="false" />
 
     <application
+        android:name=".SipHomeData"
         android:allowBackup="true"
         android:backupAgent="com.csipsimple.backup.SipBackupAgent"
         android:hardwareAccelerated="true"

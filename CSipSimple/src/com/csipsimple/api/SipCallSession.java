@@ -139,11 +139,12 @@ public class SipCallSession implements Parcelable {
      */
     public static class StatusCode {
         public static final int TRYING = 100;
+        public static final int UNLOCK = 110; // dafeng
         public static final int RINGING = 180;
         public static final int CALL_BEING_FORWARDED = 181;
         public static final int QUEUED = 182;
         public static final int PROGRESS = 183;
-        public static final int OK = 200;
+        public static final int OK = 200;        
         public static final int ACCEPTED = 202;
         public static final int MULTIPLE_CHOICES = 300;
         public static final int MOVED_PERMANENTLY = 301;

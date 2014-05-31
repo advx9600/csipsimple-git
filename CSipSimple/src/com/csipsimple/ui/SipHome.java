@@ -813,7 +813,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
             case ACCOUNTS_MENU:
                 startActivity(new Intent(this, AccountsEditList.class));
                 return true;
-            case PARAMS_MENU:
+            case PARAMS_MENU:           	
                 startActivityForResult(new Intent(SipManager.ACTION_UI_PREFS_GLOBAL), CHANGE_PREFS);
                 return true;
             case CLOSE_MENU:

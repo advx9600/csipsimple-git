@@ -5,4 +5,5 @@
     <dimen name="right_panel_margin_vertical">15dip</dimen>
     <dimen name="right_panel_fading_edge">70px</dimen>
 
+     <dimen name="dafeng_dail_txt_width">870dip</dimen>
 </resources>

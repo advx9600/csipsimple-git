@@ -41,6 +41,7 @@ import android.text.TextUtils;
 import android.util.SparseArray;
 
 import com.csipsimple.R;
+import com.csipsimple.SipHomeData;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipCallSession.StatusCode;
 import com.csipsimple.api.SipConfigManager;
@@ -176,10 +177,13 @@ public class UAStateReceiver extends Callback {
                 // Ring and inform remote about ringing with 180/RINGING
                 //pjService.callAnswer(callId, 180);
             	mIsDm365 = pjsua.get_rx_data_is_dm365(rdata) > 0 ? true : false;
-            	// mIsDm365 = true;
+            	            
             	Log.w(THIS_FILE, "set mIsDm365 true for debug");
             	Log.w(THIS_FILE, "mIsDm365:" + mIsDm365
-            	+ ",if true set Answer 183");
+            	+ ",if true set Answer 183");       
+            	
+            	((SipHomeData) pjService.service.getApplication()).setIsDoorMachine(mIsDm365);;
+            	
             	if (mIsDm365) {
             	pjService.callAnswer(callId, 183);
             	} else {

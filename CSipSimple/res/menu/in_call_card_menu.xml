@@ -43,6 +43,11 @@
         android:showAsAction="ifRoom"
         android:title="@string/send_dtmf"/>
     <item
+        android:id="@+id/unlockButton"
+        android:icon="@drawable/ic_ab_unlock"
+        android:showAsAction="ifRoom"
+        android:title="@string/send_dtmf"/>
+    <item
         android:id="@+id/videoCallButton"
         android:icon="@drawable/ic_prefs_media_video"
         android:showAsAction="ifRoom"

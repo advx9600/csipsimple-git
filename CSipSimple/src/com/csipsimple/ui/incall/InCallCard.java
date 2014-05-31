@@ -21,6 +21,7 @@
 
 package com.csipsimple.ui.incall;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -49,6 +50,7 @@ import com.actionbarsherlock.internal.view.menu.MenuBuilder.Callback;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
+import com.csipsimple.SipHomeData;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipCallSession.MediaState;
 import com.csipsimple.api.SipConfigManager;
@@ -95,22 +97,24 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     private boolean canVideo = false;
     private boolean cachedZrtpVerified;
     private boolean cachedZrtpActive;
+    private SipHomeData sipHomeData;
 
     private ActionMenuPresenter mActionMenuPresenter;
 
     private Map<String, DynActivityPlugin> incallPlugins;
 
 
-    public InCallCard(Context context, AttributeSet attrs) {
+    public InCallCard(Context context, AttributeSet attrs) {    	
         super(context, attrs);
         LayoutInflater inflater = LayoutInflater.from(context);
         inflater.inflate(R.layout.in_call_card, this, true);
 
         prefs = new PreferencesProviderWrapper(context);
         canVideo = prefs.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO);
-        initControllerView();
-        
+        initControllerView();        
         incallPlugins = ExtraPlugins.getDynActivityPlugins(context, SipManager.ACTION_INCALL_PLUGIN);
+        
+        sipHomeData = (SipHomeData) ((Activity)context).getApplication();
     }
 
     private void initControllerView() {
@@ -315,6 +319,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         
         boolean active = callInfo.isBeforeConfirmed() && callInfo.isIncoming();
         btnMenuBuilder.findItem(R.id.takeCallButton).setVisible(active);
+        btnMenuBuilder.findItem(R.id.unlockButton).setVisible(sipHomeData.isDoorMachine());
         btnMenuBuilder.findItem(R.id.dontTakeCallButton).setVisible(active);
         btnMenuBuilder.findItem(R.id.declineCallButton).setVisible(active);
         
@@ -669,6 +674,9 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
         }else if(itemId == R.id.zrtpAcceptance) {
             dispatchTriggerEvent(callInfo.isZrtpSASVerified()? IOnCallActionTrigger.ZRTP_REVOKE : IOnCallActionTrigger.ZRTP_TRUST);
             return true;
+        }else if (itemId == R.id.unlockButton){
+        	dispatchTriggerEvent(IOnCallActionTrigger.SIP_UNLOCK);
+        	return true;
         }
         return false;
     }
