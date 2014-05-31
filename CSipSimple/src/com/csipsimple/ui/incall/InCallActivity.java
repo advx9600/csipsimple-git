@@ -580,7 +580,9 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
     private class UpdateVideoPreviewRunnable implements Runnable {
         private final boolean show;
         UpdateVideoPreviewRunnable(boolean show){
-            this.show = show;
+//            this.show = show;
+        	// room machine have no camera
+        		this.show=false;
         }
         @Override
         public void run() {
