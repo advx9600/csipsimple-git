@@ -57,6 +57,15 @@ public class SipConfigManager {
      * @see #setPreferenceIntegerValue(Context, String, Integer)
      */
     public static final String SND_MEDIA_QUALITY = "snd_media_quality";
+    /*
+     * default use H264 codec only
+     */
+    public static final String H264_DEF_CODEC="codec_h264_97_wb";
+    public static final String VP8_DEF_CODE="codec_vp8_102_wb";
+    public static final String H263_DEF_CODEC="codec_h263-1998_96_wb";
+    public static final String H264_DEF_CODEC_NB="codec_h264_97_nb";
+    public static final String VP8_DEF_CODE_NB="codec_vp8_102_nb";
+    public static final String H263_DEF_CODEC_NB="codec_h263-1998_96_nb";
     /**
      * Echo canceller tail length, in miliseconds.<br/>
      * <a target="_blank" href=

@@ -69,6 +69,13 @@ public class PreferencesWrapper {
 		put(SipConfigManager.USER_AGENT, CustomDistribution.getUserAgent());
 		put(SipConfigManager.LOG_LEVEL, "1");
 		
+		put(SipConfigManager.H264_DEF_CODEC,"130");
+		put(SipConfigManager.VP8_DEF_CODE,"0");
+		put(SipConfigManager.H263_DEF_CODEC,"0");
+		put(SipConfigManager.H264_DEF_CODEC_NB,"130");
+		put(SipConfigManager.VP8_DEF_CODE_NB,"0");
+		put(SipConfigManager.H263_DEF_CODEC_NB,"0");
+		
 		put(SipConfigManager.USE_SRTP, "0");
 		put(SipConfigManager.USE_ZRTP, "1"); /* 1 is no zrtp */
 		put(SipConfigManager.UDP_TRANSPORT_PORT, "0");
@@ -218,7 +225,7 @@ public class PreferencesWrapper {
 		//Calls
 		put(SipConfigManager.AUTO_RECORD_CALLS, false);
 		put(SipConfigManager.SUPPORT_MULTIPLE_CALLS, false);
-        put(SipConfigManager.USE_VIDEO, false);
+        put(SipConfigManager.USE_VIDEO, true);
         put(SipConfigManager.PLAY_WAITTONE_ON_HOLD, false);
 		
 		//Secure
