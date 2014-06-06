@@ -110,7 +110,9 @@ public class DialerCallBar extends LinearLayout implements OnClickListener, OnLo
      * @param enabled whether the client is able to make video calls
      */
     public void setVideoEnabled(boolean enabled) {
-        findViewById(R.id.dialVideoButton).setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+    	// 设置视频拨号不可见
+    	findViewById(R.id.dialVideoButton).setVisibility(View.INVISIBLE);
+//        findViewById(R.id.dialVideoButton).setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -120,7 +122,9 @@ public class DialerCallBar extends LinearLayout implements OnClickListener, OnLo
             if (viewId == R.id.dialVideoButton) {
                 actionListener.placeVideoCall();
             }else if(viewId == R.id.dialButton) {
-                actionListener.placeCall();
+            	// 普通拨号变为视频拨号
+//                actionListener.placeCall();
+                actionListener.placeVideoCall();
             }else if(viewId == R.id.deleteButton) {
                 actionListener.deleteChar();
             }
