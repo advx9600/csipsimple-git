@@ -54,7 +54,10 @@ public class MyDBAdapter extends SQLiteOpenHelper {
 	
 	public Cursor getSortedContact(){
 		Cursor c =  ContactsWrapper.getInstance().getContactsPhones(mContext,"");
-    	if (c.getCount() <1) return null;
+    	if (c.getCount() <1) {
+    		c.close();
+    		return null;
+    	}
     	
     	List<Integer> sortList = new ArrayList<Integer>();
     	/* 添加特殊规则的排序 */
@@ -99,9 +102,6 @@ public class MyDBAdapter extends SQLiteOpenHelper {
     	db.close();
 		    	
     	db = this.getReadableDatabase();
-    	/* make sure close the db */
-    	if (mReadDB !=null) mReadDB.close();
-    	mReadDB = db;
     	
     	return db.query(TB_CONTACK_TEMP_NAME,null,"",null,null,null,null);
 //		SQLiteDatabase db = getWritableDatabase();		
