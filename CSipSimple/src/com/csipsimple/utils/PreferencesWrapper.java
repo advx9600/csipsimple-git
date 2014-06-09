@@ -219,7 +219,7 @@ public class PreferencesWrapper {
 		put(HAS_BEEN_QUIT, false);
 		put(HAS_ALREADY_SETUP_SERVICE, false);
 		put(SipConfigManager.LOG_USE_DIRECT_FILE, false);
-		put(SipConfigManager.START_WITH_TEXT_DIALER, false);
+		put(SipConfigManager.START_WITH_TEXT_DIALER, true);
         put(SipConfigManager.REWRITE_RULES_DIALER, false);
 		
 		//Calls
