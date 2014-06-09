@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -55,6 +56,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CursorAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -82,6 +85,7 @@ import com.csipsimple.utils.DialingFeedback;
 import com.csipsimple.utils.Log;
 import com.csipsimple.utils.PreferencesWrapper;
 import com.csipsimple.utils.Theme;
+import com.csipsimple.utils.contacts.ContacksSearchGridAdapter;
 import com.csipsimple.utils.contacts.ContactsSearchAdapter;
 import com.csipsimple.widgets.AccountChooserButton;
 import com.csipsimple.widgets.AccountChooserButton.OnAccountChangeListener;
@@ -150,6 +154,10 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
     private ListView autoCompleteList;
     private ContactsSearchAdapter autoCompleteAdapter;
 
+    private GridView gridContact;
+    private ContacksSearchGridAdapter gridContactAdapter;
+    private OnAutoCompleteGridItemClicked autoCompleteGridItemListener;
+    
     private DialerCallBar callBar;
     private boolean mDualPane;
 
@@ -177,6 +185,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         autoCompleteAdapter = new ContactsSearchAdapter(getActivity());
         autoCompleteListItemListener = new OnAutoCompleteListItemClicked(autoCompleteAdapter);
 
+        gridContactAdapter = new ContacksSearchGridAdapter(getActivity());        
+        autoCompleteGridItemListener = new OnAutoCompleteGridItemClicked(gridContactAdapter);
+        
         if(isDigit == null) {
             isDigit = !prefsWrapper.getPreferenceBooleanValue(SipConfigManager.START_WITH_TEXT_DIALER);
         }
@@ -201,6 +212,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         dialPad = (Dialpad) v.findViewById(R.id.dialPad);
         callBar = (DialerCallBar) v.findViewById(R.id.dialerCallBar);
         autoCompleteList = (ListView) v.findViewById(R.id.autoCompleteList);
+        gridContact = (GridView) v.findViewById(R.id.autoCompleteGridView);
         rewriteTextInfo = (TextView) v.findViewById(R.id.rewriteTextInfo);
         
         accountChooserButton = (AccountChooserButton) v.findViewById(R.id.accountChooserButton);
@@ -244,6 +256,9 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         autoCompleteList.setOnItemClickListener(autoCompleteListItemListener);
         autoCompleteList.setFastScrollEnabled(true);
 
+        
+        gridContact.setAdapter(gridContactAdapter);
+        gridContact.setOnItemClickListener(autoCompleteGridItemListener);        
         // Bottom bar setup
         callBar.setOnDialActionListener(this);
         callBar.setVideoEnabled(prefsWrapper.getPreferenceBooleanValue(SipConfigManager.USE_VIDEO));
@@ -265,7 +280,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         applyTextToAutoComplete();
         return v;
     }
-    
+       
     @Override
     public void onResume() {
         super.onResume();
@@ -471,6 +486,33 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
 
     }
 
+    private class OnAutoCompleteGridItemClicked implements OnItemClickListener {
+        private ContacksSearchGridAdapter searchAdapter;
+
+        /**
+         * Instanciate with a ContactsSearchAdapter adapter to search in when a
+         * contact entry is clicked
+         * 
+         * @param adapter the adapter to use
+         */
+        public OnAutoCompleteGridItemClicked(ContacksSearchGridAdapter adapter) {
+            searchAdapter = adapter;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> list, View v, int position, long id) {
+        	
+        	 Object selectedItem = searchAdapter.getItem(position);
+             if (selectedItem != null) {
+                 CharSequence newValue = searchAdapter.getFilter().convertResultToString(
+                         selectedItem);
+                 setTextFieldValue(newValue);
+               DialerFragment.this.placeVideoCall();
+             }                         
+        }
+
+    }
+    
     public void onClick(View view) {
         // ImageButton b = null;
         int viewId = view.getId();
@@ -569,6 +611,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         // Update views visibility
         dialPad.setVisibility(isDigit ? View.VISIBLE : View.GONE);
         autoCompleteList.setVisibility(hasAutocompleteList() ? View.VISIBLE : View.GONE);
+        gridContact.setVisibility(isDigit?View.GONE:View.VISIBLE);
         //switchTextView.setImageResource(isDigit ? R.drawable.ic_menu_switch_txt
         //        : R.drawable.ic_menu_switch_digit);
 

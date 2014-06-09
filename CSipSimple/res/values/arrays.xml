@@ -50,4 +50,7 @@
         <item>@string/uri_im</item>
     </string-array>
 
+    <string-array name="sort_by_names">
+        
+    </string-array>
 </resources>

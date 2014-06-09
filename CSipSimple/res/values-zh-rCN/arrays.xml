@@ -21,4 +21,11 @@
         <item>Foot in mouth</item>
     </string-array>
 
+    <string-array name="sort_by_names">
+        <item>管理中心</item>
+    	<item>岗亭</item>
+    	<item>门口机</item>
+    	<item>室外机</item>
+    </string-array>
+    
 </resources>

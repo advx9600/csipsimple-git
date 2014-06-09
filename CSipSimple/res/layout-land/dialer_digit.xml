@@ -61,6 +61,7 @@
             android:imeActionLabel="@string/call"
             android:imeOptions="actionGo"
             android:nextFocusRight="@+id/accountChooserButton"
+            android:focusable="false"
             android:textAppearance="@style/DialtactsDigitsTextAppearance"
             android:textColor="@android:color/white" />
 
@@ -85,7 +86,6 @@
             android:layout_alignParentTop="true" />
     </RelativeLayout>
     <!-- Autocomplete -->
-
 
     <!-- Keypad section -->
 
