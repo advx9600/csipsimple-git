@@ -113,9 +113,11 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     private TabsAdapter mTabsAdapter;
     private boolean mDualPane;
     private Thread asyncSanityChecker;
+    private Thread asyncRebootSipSimple;
     private Tab warningTab;
     private ObjectAnimator warningTabfadeAnim;
 
+    public static boolean isFirstBoot =true;
     /**
      * Listener interface for Fragments accommodated in {@link ViewPager}
      * enabling them to know when it becomes visible or invisible inside the
@@ -198,10 +200,37 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         asyncSanityChecker = new Thread() {
             public void run() {
                 asyncSanityCheck();
+                
+                /* may be a bug of ActionBarSherlock that menu can't show at first boot */
+                try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             };
         };
         asyncSanityChecker.start();
-        
+       
+        asyncRebootSipSimple =  new Thread() {
+            public void run() {                                
+                /* may be a bug of ActionBarSherlock that menu can't show at first boot */
+                try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                if (isFirstBoot){
+                	isFirstBoot=false;
+                	Intent intent = new Intent();
+                	intent.setClass(SipHome.this, SipHome.class);
+                	finish();
+                	startActivity(intent);
+                }
+            };
+        };
+        asyncRebootSipSimple.start();
     }
 
     /**
