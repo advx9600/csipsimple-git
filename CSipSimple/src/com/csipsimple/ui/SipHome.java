@@ -90,6 +90,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     public static final int CLOSE_MENU = Menu.FIRST + 3;
     public static final int HELP_MENU = Menu.FIRST + 4;
     public static final int DISTRIB_ACCOUNT_MENU = Menu.FIRST + 5;
+    public static final int CONTACT_MENU = Menu.FIRST + 6;
 
 
     private static final String THIS_FILE = "SIP_HOME";
@@ -803,7 +804,11 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         menu.add(Menu.NONE, CLOSE_MENU, Menu.NONE, R.string.menu_disconnect)
                 .setIcon(R.drawable.ic_lock_power_off)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-
+        
+        menu.add(Menu.NONE, CONTACT_MENU, Menu.NONE, R.string.menu_contact)
+        .setIcon(R.drawable.ic_lock_power_off)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -873,6 +878,12 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                 startActivityForResult(it, REQUEST_EDIT_DISTRIBUTION_ACCOUNT);
 
                 return true;
+            case CONTACT_MENU:
+            	Intent intent= Compatibility.getContactPhoneIntent();
+            	intent.setAction(Intent.ACTION_VIEW);
+            	startActivity(intent);
+            	finish();
+            	return true;            	
             default:
                 break;
         }
