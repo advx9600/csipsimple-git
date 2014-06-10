@@ -117,7 +117,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
     private Tab warningTab;
     private ObjectAnimator warningTabfadeAnim;
 
-    public static boolean isFirstBoot =true;
+    public static boolean isNeedSecondBoot =true;
     /**
      * Listener interface for Fragments accommodated in {@link ViewPager}
      * enabling them to know when it becomes visible or invisible inside the
@@ -221,8 +221,9 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-                if (isFirstBoot){
-                	isFirstBoot=false;
+                
+                if (isNeedSecondBoot){
+                	isNeedSecondBoot=false;
                 	Intent intent = new Intent();
                 	intent.setClass(SipHome.this, SipHome.class);
                 	finish();
@@ -782,9 +783,10 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
                         toSelectId = TAB_ID_MESSAGES;
                     }
                 }
-                if (toSelectTab != null) {
+                if (toSelectTab != null) {                	
                     ab.selectTab(toSelectTab);
                     initTabId = toSelectId;
+                    if (initTabId !=TAB_ID_DIALER) isNeedSecondBoot = false;
                 }else {
                     initTabId = 0;
                 }
