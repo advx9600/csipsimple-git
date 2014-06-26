@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract.Data;
 
 public class MyDBAdapter extends SQLiteOpenHelper {
-	private SQLiteDatabase mReadDB = null;
+	private static SQLiteDatabase mReadDB = null;
 	private final String TB_CONTACK_TEMP_NAME = "tb_contack_temp";
 	private final String TABLE_CONTACK_TEMP_CREATE="CREATE TABLE IF NOT EXISTS "
 	+TB_CONTACK_TEMP_NAME+
@@ -103,6 +103,9 @@ public class MyDBAdapter extends SQLiteOpenHelper {
 		    	
     	db = this.getReadableDatabase();
     	
+    	if (mReadDB !=null) mReadDB.close();
+   	   	mReadDB = db;
+   	   	
     	return db.query(TB_CONTACK_TEMP_NAME,null,"",null,null,null,null);
 //		SQLiteDatabase db = getWritableDatabase();		
 //		while(c.moveToNext()){
