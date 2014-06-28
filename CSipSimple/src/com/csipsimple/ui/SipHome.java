@@ -212,26 +212,32 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         };
         asyncSanityChecker.start();
        
-        asyncRebootSipSimple =  new Thread() {
-            public void run() {                                
-                /* may be a bug of ActionBarSherlock that menu can't show at first boot */
-                try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                
-                if (isNeedSecondBoot){
-                	isNeedSecondBoot=false;
-                	Intent intent = new Intent();
-                	intent.setClass(SipHome.this, SipHome.class);
-                	finish();
-                	startActivity(intent);
-                }
-            };
-        };
-        asyncRebootSipSimple.start();
+//        asyncRebootSipSimple =  new Thread() {
+//            public void run() {                                
+//                /* may be a bug of ActionBarSherlock that menu can't show at first boot */
+//                try {
+//					Thread.sleep(5000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//                
+//                if (isNeedSecondBoot){
+//                	isNeedSecondBoot=false;
+//                	Intent intent = new Intent();
+//                	intent.setClass(SipHome.this, SipHome.class);
+//                	finish();
+//                	startActivity(intent);
+//                }
+//            };
+//        };
+//        asyncRebootSipSimple.start();
+        try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
