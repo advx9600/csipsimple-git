@@ -6,4 +6,10 @@
     <dimen name="right_panel_fading_edge">70px</dimen>
 
      <dimen name="dafeng_dail_txt_width">870dip</dimen>
+     
+     <!-- 如果是其它分辨率则需要重新制定 -->
+     <dimen name="dail_gridview_column_width">200dip</dimen>
+     <dimen name="dial_griditem_height">215dip</dimen>
+     <dimen name="dial_griditem_photo_height">155dip</dimen>
+     <dimen name="dial_griditem_photo_width">155dip</dimen>
 </resources>

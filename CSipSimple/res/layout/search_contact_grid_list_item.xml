@@ -18,17 +18,16 @@
  */
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
+    android:layout_height="@dimen/dial_griditem_height"
+    android:gravity="center"
     android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/contact_photo"
-        android:layout_width="?android:attr/listPreferredItemHeight"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:layout_gravity="center"
+        android:layout_width="@dimen/dial_griditem_photo_width"
+        android:layout_height="@dimen/dial_griditem_photo_height"        
         android:contentDescription="@string/empty_description"
         android:padding="2dip"
         android:scaleType="fitCenter"
@@ -37,32 +36,24 @@
     <View
         android:id="@+id/strut"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_centerVertical="true" />
+        android:layout_height="0dp" />
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/strut"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="2dip"
-        android:layout_toRightOf="@+id/contact_photo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"                
+        android:layout_margin="2dip"                       
         android:ellipsize="end"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/strut"
+        android:layout_height="wrap_content"        
         android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:layout_toRightOf="@+id/contact_photo"
+        android:layout_marginRight="5dip"        
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -71,14 +62,10 @@
     <TextView
         android:id="@+id/number"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/strut"
-        android:layout_toRightOf="@+id/label"
+        android:layout_height="wrap_content"        
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?android:attr/textColorPrimary" />
 
-</RelativeLayout>
+</LinearLayout>	 

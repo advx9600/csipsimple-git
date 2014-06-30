@@ -671,7 +671,7 @@ public class DialerFragment extends SherlockFragment implements OnClickListener,
         MenuItem delMenu = menu.add(isDigit ? R.string.switch_to_text : R.string.switch_to_digit);
         delMenu.setIcon(
                 isDigit ? R.drawable.ic_menu_switch_txt
-                        : R.drawable.ic_menu_switch_digit).setShowAsAction( action );
+                        : R.drawable.ic_menu_switch_digit2).setShowAsAction( action );
         delMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

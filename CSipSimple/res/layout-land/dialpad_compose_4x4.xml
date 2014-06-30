@@ -22,19 +22,7 @@
         android:background="#66000000" />
         <!-- android:visibility="gone" -->
         
-	<GridView
-        android:id="@+id/autoCompleteGridView"        
-        android:layout_width="fill_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        android:numColumns="auto_fit"
-        android:verticalSpacing="100dp"
-        android:horizontalSpacing="50dp"
-        android:columnWidth="160dp"
-        android:stretchMode="columnWidth"
-        android:gravity="center" 
-        android:layout_gravity="center"
-        />
+	
 <ListView
         android:id="@+id/autoCompleteList"
         android:layout_width="@dimen/dafeng_dail_txt_width"

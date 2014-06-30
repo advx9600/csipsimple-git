@@ -30,6 +30,20 @@
     android:paddingBottom="@dimen/right_panel_margin_vertical"
     android:paddingTop="@dimen/right_panel_margin_vertical" >
 
+    <GridView
+        android:id="@+id/autoCompleteGridView"        
+        android:layout_width="fill_parent"
+        android:visibility="gone"
+        android:layout_height="fill_parent"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="30dp"
+        android:horizontalSpacing="50dp"
+        android:columnWidth="200dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center" 
+        android:layout_gravity="center"
+        />
+    
     <RelativeLayout
         android:id="@+id/topField"
         android:layout_width="fill_parent"
