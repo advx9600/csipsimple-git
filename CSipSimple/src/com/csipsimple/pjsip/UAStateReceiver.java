@@ -99,7 +99,6 @@ public class UAStateReceiver extends Callback {
     private boolean mAutoRecordCalls;
     private int mMicroSource;
     
-    private boolean mIsDm365 = false;    
 	
     private void lockCpu() {
         if (eventLock != null) {
@@ -176,15 +175,13 @@ public class UAStateReceiver extends Callback {
             } else {
                 // Ring and inform remote about ringing with 180/RINGING
                 //pjService.callAnswer(callId, 180);
-            	mIsDm365 = pjsua.get_rx_data_is_dm365(rdata) > 0 ? true : false;
-            	            
-            	Log.w(THIS_FILE, "set mIsDm365 true for debug");
-            	Log.w(THIS_FILE, "mIsDm365:" + mIsDm365
-            	+ ",if true set Answer 183");       
-            	
-            	((SipHomeData) pjService.service.getApplication()).setIsDoorMachine(mIsDm365);;
-            	
-            	if (mIsDm365) {
+            	SipHomeData sipHomeData=((SipHomeData) pjService.service.getApplication());
+            	sipHomeData.setIsDoorMachine(pjsua.get_rx_data_is_dm365(rdata) > 0 ? true : false);
+            	boolean isDm365 = sipHomeData.isDoorMachine();
+            	Log.w(THIS_FILE, "isDm365:" + isDm365
+            	+ ",if true set Answer 183");
+            	            	
+            	if (isDm365) {
             	pjService.callAnswer(callId, 183);
             	} else {
             	pjService.callAnswer(callId, 180);
