@@ -12,4 +12,7 @@
      <dimen name="dial_griditem_height">215dip</dimen>
      <dimen name="dial_griditem_photo_height">155dip</dimen>
      <dimen name="dial_griditem_photo_width">155dip</dimen>
+     
+     <!-- 需要重新定义 -->
+     <dimen name="call_video_width">850dip</dimen>
 </resources>

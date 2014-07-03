@@ -34,15 +34,9 @@
 
     <LinearLayout
         android:id="@+id/inCallContainer"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/call_video_width"
         android:layout_height="match_parent"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="3"
-            android:orientation="horizontal" >
 
             <!--
 				Can we do better than using two linear layouts here?
@@ -50,35 +44,32 @@
 				plays bad with hidden childs and above/below only support one id
             -->
             <!-- Grid for active calls -->
-
             <com.csipsimple.ui.incall.InCallInfoGrid
                 android:id="@+id/activeCallsGrid"
-                android:layout_width="0dip"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:paddingBottom="4dip"
-                android:paddingTop="4dip"
                 tools:ignore="NestedWeights" />
-
-            <!-- Grid for held calls -->
-
+            
+            <!-- Grid for held calls -->			
             <com.csipsimple.ui.incall.InCallInfoGrid
                 android:id="@+id/heldCallsGrid"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/in_call_held_background"
-                android:padding="4dip"
+                android:background="@drawable/in_call_held_background"                
                 android:visibility="gone" />
-        </LinearLayout>
+    </LinearLayout>
 
-        <!-- Answer slider/buttons -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/inCallContainer"
+        android:orientation="vertical">
+         <!-- Answer slider/buttons -->
 
         <com.csipsimple.ui.incall.locker.InCallAnswerControls
             android:id="@+id/inCallAnswerControls"
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="2"
+            android:layout_height="100dip"
             android:visibility="gone" />
 
         <!-- Wraps split action bar manually managed -->
@@ -86,10 +77,13 @@
         <com.csipsimple.ui.incall.InCallControls
             android:id="@+id/inCallControls"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/incall_bottom_bar_bg" />
+            android:layout_height="match_parent"
+            android:background="@drawable/incall_bottom_bar_bg"
+            />
+        
     </LinearLayout>
-
+    
+    
     <com.csipsimple.ui.incall.locker.ScreenLocker
         android:id="@+id/lockerOverlay"
         android:layout_width="match_parent"

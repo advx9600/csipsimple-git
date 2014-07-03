@@ -251,7 +251,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
     /* We accept height twice than width */
     private static float minRatio = 0.5f;
     /* We accept width 1/4 bigger than height */ 
-    private static float maxRatio = 1.25f;
+    private static float maxRatio = 1.85f;
     
     private static float minButtonRation = 0.75f;
     
