@@ -55,6 +55,7 @@ import android.widget.RelativeLayout;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.csipsimple.R;
+import com.csipsimple.SipHomeData;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
@@ -314,6 +315,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
         
         detachVideoPreview();
         //handler.setActivityInstance(null);
+        ((SipHomeData) (this.getApplication())).setIsDoorMachine(false);;
         super.onDestroy();
     }
     
