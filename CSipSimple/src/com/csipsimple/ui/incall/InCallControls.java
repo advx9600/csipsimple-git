@@ -73,8 +73,10 @@ public class InCallControls extends FrameLayout implements Callback {
             supportMultipleCalls = SipConfigManager.getPreferenceBooleanValue(getContext(), SipConfigManager.SUPPORT_MULTIPLE_CALLS, false);
         }
         
+//        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+//                (int) getResources().getDimension(R.dimen.incall_bottom_bar_height));
         final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-                (int) getResources().getDimension(R.dimen.incall_bottom_bar_height));
+        		LayoutParams.MATCH_PARENT);
         ActionMenuPresenter mActionMenuPresenter = new ActionMenuPresenter(getContext()) {
             public void bindItemView(MenuItemImpl item, MenuView.ItemView itemView) {
                 super.bindItemView(item, itemView);
@@ -95,6 +97,9 @@ public class InCallControls extends FrameLayout implements Callback {
         btnMenuBuilder.addMenuPresenter(mActionMenuPresenter);
         ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(this);
         menuView.setBackgroundResource(R.drawable.abs__ab_bottom_transparent_dark_holo);
+        
+        menuView.setVerticalLayout(true);
+        menuView.requestLayout();
         
         this.addView(menuView, layoutParams);
     }
