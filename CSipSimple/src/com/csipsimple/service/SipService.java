@@ -53,6 +53,7 @@ import android.view.SurfaceView;
 import android.widget.Toast;
 
 import com.csipsimple.R;
+import com.csipsimple.SipHomeData;
 import com.csipsimple.api.ISipConfiguration;
 import com.csipsimple.api.ISipService;
 import com.csipsimple.api.MediaState;
@@ -321,8 +322,11 @@ public class SipService extends Service {
     								message, "text/plain", System.currentTimeMillis(), 
     								SipMessage.MESSAGE_TYPE_QUEUED, called.getCallee());
     						msg.setRead(true);
-    						getContentResolver().insert(SipMessage.MESSAGE_URI, msg.getContentValues());
-    						Log.d(THIS_FILE, "Inserted "+msg.getTo());
+    						SipHomeData sipData = (SipHomeData) pjService.service.getApplication();
+    						if (!sipData.isDoorMachine()){
+    							getContentResolver().insert(SipMessage.MESSAGE_URI, msg.getContentValues());
+        						Log.d(THIS_FILE, "Inserted "+msg.getTo());
+    						}    						
     					}else {
     						SipService.this.notifyUserOfMessage( getString(R.string.invalid_sip_uri)+ " : "+callee );
     					}

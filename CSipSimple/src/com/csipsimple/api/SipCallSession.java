@@ -139,7 +139,7 @@ public class SipCallSession implements Parcelable {
      */
     public static class StatusCode {
         public static final int TRYING = 100;
-        public static final int UNLOCK = 110; // dafeng
+//        public static final int UNLOCK = 110; // dafeng
         public static final int RINGING = 180;
         public static final int CALL_BEING_FORWARDED = 181;
         public static final int QUEUED = 182;
@@ -184,6 +184,13 @@ public class SipCallSession implements Parcelable {
          * 580, PJSIP_SC_BUSY_EVERYWHERE = 600, PJSIP_SC_DOES_NOT_EXIST_ANYWHERE
          * = 604, PJSIP_SC_NOT_ACCEPTABLE_ANYWHERE = 606,
          */
+        public static String getUnlockMsg(){
+        	char[] b=new char[3];
+        	b[0]=0x1;
+        	b[1]=0x2;
+        	b[2]=0x0;
+        	return String.valueOf(b).substring(0,b.length-1)+"_unlock";
+        }
     }
 
     /**

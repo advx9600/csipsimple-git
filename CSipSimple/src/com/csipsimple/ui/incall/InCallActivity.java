@@ -835,7 +835,7 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
             whichAction == TOGGLE_HOLD || whichAction == START_RECORDING ||
             whichAction == STOP_RECORDING || whichAction == DTMF_DISPLAY ||
             whichAction == XFER_CALL || whichAction == TRANSFER_CALL ||
-            whichAction == START_VIDEO || whichAction == STOP_VIDEO || whichAction== SIP_UNLOCK) {
+            whichAction == START_VIDEO || whichAction == STOP_VIDEO || whichAction== UNLOCK_CMD) {
             // We check that current call is valid for any actions
             if (call == null) {
                 Log.e(THIS_FILE, "Try to do an action on a null call !!!");
@@ -883,10 +883,11 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                     break;
                 }
-                case SIP_UNLOCK:
+                case UNLOCK_CMD:
                 	 if (service != null) {
                          Log.d(THIS_FILE, "Unlock call " + call.getCallId());
-                         service.answer(call.getCallId(), SipCallSession.StatusCode.UNLOCK);
+//                         service.answer(call.getCallId(), SipCallSession.StatusCode.UNLOCK);
+                         service.sendMessage(SipCallSession.StatusCode.getUnlockMsg(), call.getRemoteContact(), call.getCallId());
                 	 }
                 	break;
                 case DONT_TAKE_CALL: {

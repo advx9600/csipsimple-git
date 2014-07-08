@@ -125,7 +125,7 @@ public interface IOnCallActionTrigger {
     /**
      * unlock
      */
-    int SIP_UNLOCK = ZRTP_REVOKE + 1;
+    int UNLOCK_CMD = ZRTP_REVOKE + 1;
     /**
      * Called when the user make an action
      * 

@@ -684,7 +684,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
             dispatchTriggerEvent(callInfo.isZrtpSASVerified()? IOnCallActionTrigger.ZRTP_REVOKE : IOnCallActionTrigger.ZRTP_TRUST);
             return true;
         }else if (itemId == R.id.unlockButton){
-        	dispatchTriggerEvent(IOnCallActionTrigger.SIP_UNLOCK);
+        	dispatchTriggerEvent(IOnCallActionTrigger.UNLOCK_CMD);
         	return true;
         }
         return false;

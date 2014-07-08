@@ -39,6 +39,7 @@ import com.actionbarsherlock.internal.view.menu.MenuView;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.csipsimple.R;
+import com.csipsimple.SipHomeData;
 import com.csipsimple.api.MediaState;
 import com.csipsimple.api.SipCallSession;
 import com.csipsimple.api.SipConfigManager;
@@ -56,6 +57,7 @@ public class InCallControls extends FrameLayout implements Callback {
 	private SipCallSession currentCall;
     private MenuBuilder btnMenuBuilder;
 	private boolean supportMultipleCalls = false;
+	private SipHomeData sipData;
 
 
 	public InCallControls(Context context) {
@@ -93,13 +95,15 @@ public class InCallControls extends FrameLayout implements Callback {
         btnMenuBuilder = new MenuBuilder(getContext());
         btnMenuBuilder.setCallback(this);
         MenuInflater inflater = new MenuInflater(getContext());
-        inflater.inflate(R.menu.in_call_controls_menu, btnMenuBuilder);
+        inflater.inflate(R.menu.in_call_controls_menu2, btnMenuBuilder);
         btnMenuBuilder.addMenuPresenter(mActionMenuPresenter);
         ActionMenuView menuView = (ActionMenuView) mActionMenuPresenter.getMenuView(this);
         menuView.setBackgroundResource(R.drawable.abs__ab_bottom_transparent_dark_holo);
         
         menuView.setVerticalLayout(true);
         menuView.requestLayout();
+        
+        sipData=(SipHomeData) context.getApplicationContext().getApplicationContext();
         
         this.addView(menuView, layoutParams);
     }
@@ -123,7 +127,7 @@ public class InCallControls extends FrameLayout implements Callback {
 		currentCall = callInfo;
 		
 		if(currentCall == null) {
-			setVisibility(GONE);
+//			setVisibility(GONE);
 			return;
 		}
 		
@@ -148,12 +152,12 @@ public class InCallControls extends FrameLayout implements Callback {
 			break;
 		case SipCallSession.InvState.EARLY:
 		default:
-			if (currentCall.isIncoming()) {
-			    setVisibility(GONE);
-			} else {
-			    setVisibility(VISIBLE);
-				setEnabledMediaButtons(true);
-			}
+//			if (currentCall.isIncoming()) {
+//			    setVisibility(GONE);
+//			} else {
+//			    setVisibility(VISIBLE);
+//				setEnabledMediaButtons(true);
+//			}
 			break;
 		}
 		
@@ -178,6 +182,9 @@ public class InCallControls extends FrameLayout implements Callback {
 	public void setMediaState(MediaState mediaState) {
 		lastMediaState = mediaState;
 
+		if (!sipData.isDoorMachine()){
+			btnMenuBuilder.findItem(R.id.unlockButton).setVisible(false).setChecked(false);
+		}
         // Update menu
 		// BT
 		boolean enabled, checked;
@@ -188,7 +195,7 @@ public class InCallControls extends FrameLayout implements Callback {
     		enabled = callOngoing && lastMediaState.canBluetoothSco;
     		checked = lastMediaState.isBluetoothScoOn;
 		}
-        btnMenuBuilder.findItem(R.id.bluetoothButton).setVisible(enabled).setChecked(checked);
+//        btnMenuBuilder.findItem(R.id.bluetoothButton).setVisible(enabled).setChecked(checked);
         
         // Mic
         if(lastMediaState == null) {
@@ -214,7 +221,7 @@ public class InCallControls extends FrameLayout implements Callback {
         btnMenuBuilder.findItem(R.id.speakerButton).setVisible(enabled).setChecked(checked);
         
         // Add call
-        btnMenuBuilder.findItem(R.id.addCallButton).setVisible(supportMultipleCalls && callOngoing);
+//        btnMenuBuilder.findItem(R.id.addCallButton).setVisible(supportMultipleCalls && callOngoing);
 	}
 
     @Override
@@ -249,6 +256,9 @@ public class InCallControls extends FrameLayout implements Callback {
             return true;
         } else if (id == R.id.mediaSettingsButton) {
             dispatchTriggerEvent(IOnCallActionTrigger.MEDIA_SETTINGS);
+            return true;
+        } else if (id == R.id.unlockButton){
+        	dispatchTriggerEvent(IOnCallActionTrigger.UNLOCK_CMD);
             return true;
         }
         return false;

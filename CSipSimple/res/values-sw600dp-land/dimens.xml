@@ -15,4 +15,5 @@
      
      <!-- 需要重新定义 -->
      <dimen name="call_video_width">850dip</dimen>
+     <dimen name="btn_in_call_answer_controls_height">200dip</dimen>
 </resources>
