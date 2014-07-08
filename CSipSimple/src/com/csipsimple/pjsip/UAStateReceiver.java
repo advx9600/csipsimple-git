@@ -212,6 +212,17 @@ public class UAStateReceiver extends Callback {
 
     @Override
     public void on_call_state(final int callId, pjsip_event e) {
+    	SipHomeData sipHomeData=((SipHomeData) pjService.service.getApplication());
+    	if (sipHomeData.isDoorMachine()){
+    		try {
+    			final SipCallSession callInfo = updateCallInfoFromStack(callId,e);    			
+    			if (callInfo.getCallState() == SipCallSession.InvState.CONFIRMED){
+    				on_call_media_state2(callId);
+    			}
+    		} catch (Exception e2) {
+    			e2.printStackTrace();
+    		}
+    	}
         pjsua.css_on_call_state(callId, e);
         lockCpu();
 
@@ -411,6 +422,10 @@ public class UAStateReceiver extends Callback {
 
     @Override
     public void on_call_media_state(final int callId) {
+    	SipHomeData sipHomeData=((SipHomeData) pjService.service.getApplication());
+    	if (sipHomeData.isDoorMachine()) 
+    		return;
+    	
         pjsua.css_on_call_media_state(callId);
 
         lockCpu();
@@ -493,7 +508,90 @@ public class UAStateReceiver extends Callback {
 
         unlockCpu();
     }
+    
+    public void on_call_media_state2(final int callId) {
+        pjsua.css_on_call_media_state(callId);
 
+        lockCpu();
+        if (pjService.mediaManager != null) {
+            // Do not unfocus here since we are probably in call.
+            // Unfocus will be done anyway on call disconnect
+            pjService.mediaManager.stopRing();
+        }
+
+        try {
+            final SipCallSession callInfo = updateCallInfoFromStack(callId, null);
+
+            /*
+             * Connect ports appropriately when media status is ACTIVE or REMOTE
+             * HOLD, otherwise we should NOT connect the ports.
+             */
+            boolean connectToOtherCalls = false;
+            int callConfSlot = callInfo.getConfPort();
+            int mediaStatus = callInfo.getMediaStatus();
+            if (mediaStatus == SipCallSession.MediaState.ACTIVE ||
+                    mediaStatus == SipCallSession.MediaState.REMOTE_HOLD) {
+                
+                connectToOtherCalls = true;
+                pjsua.conf_connect(callConfSlot, 0);
+                pjsua.conf_connect(0, callConfSlot);
+
+                // Adjust software volume
+                if (pjService.mediaManager != null) {
+                    pjService.mediaManager.setSoftwareVolume();
+                }
+
+                // Auto record
+                if (mAutoRecordCalls && pjService.canRecord(callId)
+                        && !pjService.isRecording(callId)) {
+                    pjService
+                            .startRecording(callId, SipManager.BITMASK_IN | SipManager.BITMASK_OUT);
+                }
+            }
+            
+
+            // Connects/disconnnect to other active calls (for conferencing).
+            boolean hasOtherCall = false;
+            synchronized (callsList) {
+                if (callsList != null) {
+                    for (int i = 0; i < callsList.size(); i++) {
+                        SipCallSessionImpl otherCallInfo = getCallInfo(i);
+                        if (otherCallInfo != null && otherCallInfo != callInfo) {
+                            int otherMediaStatus = otherCallInfo.getMediaStatus();
+                            if(otherCallInfo.isActive() && otherMediaStatus !=  SipCallSession.MediaState.NONE) {
+                                hasOtherCall = true;
+                                boolean connect = connectToOtherCalls && (otherMediaStatus == SipCallSession.MediaState.ACTIVE ||
+                                                                                                                    otherMediaStatus == SipCallSession.MediaState.REMOTE_HOLD);
+                                int otherCallConfSlot = otherCallInfo.getConfPort();
+                                if(connect) {
+                                    pjsua.conf_connect(callConfSlot, otherCallConfSlot);
+                                    pjsua.conf_connect(otherCallConfSlot, callConfSlot);
+                                }else {
+                                    pjsua.conf_disconnect(callConfSlot, otherCallConfSlot);
+                                    pjsua.conf_disconnect(otherCallConfSlot, callConfSlot);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Play wait tone
+            if(mPlayWaittone) {
+                if(mediaStatus == SipCallSession.MediaState.REMOTE_HOLD && !hasOtherCall) {
+                    pjService.startWaittoneGenerator(callId);
+                }else {
+                    pjService.stopWaittoneGenerator(callId);
+                }
+            }
+
+            msgHandler.sendMessage(msgHandler.obtainMessage(ON_MEDIA_STATE, callInfo));
+        } catch (SameThreadException e) {
+            // Nothing to do we are in a pj thread here
+        }
+
+        unlockCpu();
+    }
     @Override
     public void on_mwi_info(int acc_id, pj_str_t mime_type, pj_str_t body) {
         lockCpu();
