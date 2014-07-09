@@ -524,6 +524,26 @@ public class SipService extends Service {
 			});
 		}
 
+		@Override
+		public int getStreamMaxVolume(int type) throws RemoteException {
+			// TODO Auto-generated method stub
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);			
+			return pjService.getStreamMaxVolume(type);			
+		}
+
+		@Override
+		public int getStreamVolume(int type) throws RemoteException {
+			// TODO Auto-generated method stub
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			return pjService.getStreamVolume(type);
+		}
+
+		@Override
+		public void setStreamVolume(int type, int value,int flags) throws RemoteException {
+			// TODO Auto-generated method stub
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			pjService.setStreamVolume(type, value, flags);
+		}
 
         /**
          * {@inheritDoc}

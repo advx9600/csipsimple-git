@@ -56,6 +56,9 @@ import java.util.TimerTask;
 
 public class InCallMediaControl extends Activity implements OnSeekBarChangeListener, OnCheckedChangeListener, OnClickListener {
 	protected static final String THIS_FILE = "inCallMediaCtrl";
+	public static final String EXTRA_DATA_SIP_SESSION_NAME="extra_data_sip_session";
+	
+	private SeekBar ringAmplification;
 	private SeekBar speakerAmplification;
 	private SeekBar microAmplification;
 	private Button saveButton;
@@ -67,7 +70,7 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 	private final static int AUTO_QUIT_DELAY = 3000;
 	private Timer quitTimer;
     private ProgressBar txProgress;
-    private ProgressBar rxProgress;
+    private ProgressBar rxProgress;    
     private LinearLayout okBar;
 	
 	@Override
@@ -78,22 +81,23 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 
 
 		
+		ringAmplification = (SeekBar) findViewById(R.id.ring_level);
 		speakerAmplification = (SeekBar) findViewById(R.id.speaker_level);
 		microAmplification = (SeekBar) findViewById(R.id.micro_level);
 		saveButton = (Button) findViewById(R.id.save_bt);
 		echoCancellation = (CheckBox) findViewById(R.id.echo_cancellation);
 		okBar = (LinearLayout) findViewById(R.id.ok_bar);
-		
+				
 		speakerAmplification.setMax((int) (max * subdivision * 2));
 		microAmplification.setMax((int) (max * subdivision * 2));
-		
+				
 		speakerAmplification.setOnSeekBarChangeListener(this);
 		microAmplification.setOnSeekBarChangeListener(this);
 		
 		saveButton.setOnClickListener(this);
 		
 		echoCancellation.setOnCheckedChangeListener(this);
-		
+				
         rxProgress = (ProgressBar) findViewById(R.id.rx_bar);
         txProgress = (ProgressBar) findViewById(R.id.tx_bar);
 	}
@@ -272,6 +276,9 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 		}
     };
 	
+    public static void a(String msg){
+    	android.util.Log.i("aaaaa","aaaaa:"+msg);
+    }
 
     private void updateUIFromMedia() {
 
@@ -283,7 +290,20 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
                 Log.e(THIS_FILE, "Sip service not avail for request ", e);
             }
         }
-
+        
+        if (sipService!=null){
+        	try{
+        		int max = sipService.getStreamMaxVolume(AudioManager.STREAM_RING);
+        		int cur = sipService.getStreamVolume(AudioManager.STREAM_RING);
+        		Log.d(THIS_FILE, "max:"+max+",cur:"+cur);
+        		ringAmplification.setMax(max);
+        		ringAmplification.setProgress(cur);
+        		ringAmplification.setOnSeekBarChangeListener(this);
+        	}catch(Exception e){
+        		Log.e(THIS_FILE, "Sip service not avail for request ", e);
+        	}
+        }
+        
         Float speakerLevel = SipConfigManager.getPreferenceFloatValue(this, useBT ?
                 SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL);
         speakerAmplification.setProgress(valueToProgressUnit(speakerLevel));
@@ -294,6 +314,21 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 
         echoCancellation.setChecked(SipConfigManager.getPreferenceBooleanValue(this,
                 SipConfigManager.ECHO_CANCELLATION));
+        try{
+        	if (sipService != null){
+        		Bundle bundle = getIntent().getExtras();        		
+        		SipCallSession session=(SipCallSession) bundle.get(EXTRA_DATA_SIP_SESSION_NAME);        		
+        		if (session != null){
+        			if (session.getCallState() == SipCallSession.InvState.EARLY){
+        				findViewById(R.id.txrx_content).setVisibility(View.GONE);        				
+        			}else{
+        				findViewById(R.id.ring_content).setVisibility(View.GONE);
+        			}
+        		}
+        	}
+        }catch(Exception e){
+        	Log.e(THIS_FILE, "Sip service not avail for request ", e);
+        }        
 
     }
 
@@ -329,6 +364,8 @@ public class InCallMediaControl extends Activity implements OnSeekBarChangeListe
 					sipService.confAdjustRxLevel(0, newValue);
 					key =  useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
 					SipConfigManager.setPreferenceFloatValue(this, key, newValue);
+				}else if (sId == R.id.ring_level){
+					sipService.setStreamVolume(AudioManager.STREAM_RING, value,0);
 				}
 			} catch (RemoteException e) {
 				Log.e(THIS_FILE, "Impossible to set mic/speaker level", e);

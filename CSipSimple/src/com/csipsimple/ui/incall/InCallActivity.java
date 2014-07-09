@@ -978,7 +978,9 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     break;
                 }
                 case MEDIA_SETTINGS: {
-                    startActivity(new Intent(this, InCallMediaControl.class));
+                	Intent intent = new Intent(this, InCallMediaControl.class);
+                	intent.putExtra(InCallMediaControl.EXTRA_DATA_SIP_SESSION_NAME, getActiveCallInfo());
+                    startActivity(intent);
                     break;
                 }
                 case XFER_CALL: {

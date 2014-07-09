@@ -122,7 +122,7 @@ public class InCallControls extends FrameLayout implements Callback {
         callOngoing = isInCall;
         setMediaState(lastMediaState);
 	}
-	
+	private boolean isCalling=false;
 	public void setCallState(SipCallSession callInfo) {
 		currentCall = callInfo;
 		
@@ -138,11 +138,13 @@ public class InCallControls extends FrameLayout implements Callback {
 		    setVisibility(GONE);
 			break;
 		case SipCallSession.InvState.CALLING:
+			isCalling=true;
 		case SipCallSession.InvState.CONNECTING:
 		    setVisibility(VISIBLE);
 			setEnabledMediaButtons(true);
 			break;
 		case SipCallSession.InvState.CONFIRMED:
+			isCalling = false;
 		    setVisibility(VISIBLE);
 			setEnabledMediaButtons(true);
 			break;
@@ -232,6 +234,7 @@ public class InCallControls extends FrameLayout implements Callback {
         btnMenuBuilder.findItem(R.id.soundMuteButton).setVisible(enabled).setChecked(checked);
         // Add call
 //        btnMenuBuilder.findItem(R.id.addCallButton).setVisible(supportMultipleCalls && callOngoing);
+        btnMenuBuilder.findItem(R.id.mediaSettingsButton).setVisible(!isCalling);
 	}
 
     @Override

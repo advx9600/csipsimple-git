@@ -1602,6 +1602,26 @@ public class PjSipService {
         }
     }
 
+    public int getStreamMaxVolume(int type) {
+    	if (created && mediaManager != null) {
+            return mediaManager.getStreamMaxVolume(type);
+        }
+    	return -1;
+    }
+    
+    public int getStreamVolume(int type){
+    	if (created && mediaManager != null) {
+            return mediaManager.getStreamVolume(type);
+        } 
+    	return -1;
+    }
+    
+    public void setStreamVolume(int type, int value,int flags){
+    	if (created && mediaManager != null) {
+            mediaManager.setStreamVolume(type, value, flags);
+        }
+    }
+    
     public SipCallSession[] getCalls() {
         if (created && userAgentReceiver != null) {
             SipCallSession[] callsInfo = userAgentReceiver.getCalls();

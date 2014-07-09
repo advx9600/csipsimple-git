@@ -535,6 +535,23 @@ public class MediaManager implements BluetoothChangeListener {
 		broadcastMediaChanged();
 	}
 	
+	public int getStreamMaxVolume(int type)  {
+		int result = -1;
+		if(service != null) {
+			result= audioManager.getStreamMaxVolume(type); 
+		}
+//		broadcastMediaChanged();
+		return result;
+	}
+	
+	public int getStreamVolume(int type){
+		int result =-1;
+		if (service != null){
+			result= audioManager.getStreamVolume(type);
+		}
+		return result;
+	}
+	
 	public void setBluetoothOn(boolean on) throws SameThreadException {
 		Log.d(THIS_FILE, "Set BT "+on);
 		if(service != null && restartAudioWhenRoutingChange && !ringer.isRinging()) {

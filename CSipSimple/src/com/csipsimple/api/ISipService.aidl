@@ -143,6 +143,12 @@ interface ISipService{
 	void confAdjustTxLevel(int port, float value);
 	void confAdjustRxLevel(int port, float value);
 	/**
+	* get stream volume
+	*/
+	int getStreamMaxVolume(int type);
+	int getStreamVolume(int type);
+	void setStreamVolume(int type,int value,int flags);
+	/**
 	 * Get Rx and Tx sound level for a given port.
 	 *
 	 * @param port Port id we'd like to have the level
