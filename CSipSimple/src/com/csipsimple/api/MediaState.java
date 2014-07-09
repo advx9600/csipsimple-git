@@ -46,7 +46,10 @@ public class MediaState implements Parcelable {
      * Whether the microphone is currently muted
      */
     public boolean isMicrophoneMute = false;
-
+    /**
+     * Whether the sound is currently muted
+     */
+    public boolean isSoundMute = false;
     /**
      * Whether the audio routes to the speaker
      */
@@ -59,6 +62,10 @@ public class MediaState implements Parcelable {
      * Gives phone capability to mute microphone
      */
     public boolean canMicrophoneMute = true;
+    /**
+     * mute sound
+     */
+    public boolean canSoundMute = true;
     /**
      * Gives phone capability to route to speaker
      */

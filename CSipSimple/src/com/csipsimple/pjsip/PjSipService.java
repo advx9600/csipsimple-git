@@ -1585,6 +1585,11 @@ public class PjSipService {
         }
     }
 
+    public void setSoundMute(boolean on) throws SameThreadException {
+        if (created && mediaManager != null) {
+            mediaManager.setSoundMute(on);
+        }
+    }
     /**
      * Change speaker phone mode
      * 

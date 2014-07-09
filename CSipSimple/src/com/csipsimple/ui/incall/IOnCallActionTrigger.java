@@ -126,6 +126,14 @@ public interface IOnCallActionTrigger {
      * unlock
      */
     int UNLOCK_CMD = ZRTP_REVOKE + 1;
+    /*
+     * sound mute on
+     */
+    int SOUND_MUTE_ON = UNLOCK_CMD+1;
+    /*
+     * sound mute off
+     */
+    int SOUND_MUTE_OFF = SOUND_MUTE_ON+1;
     /**
      * Called when the user make an action
      * 

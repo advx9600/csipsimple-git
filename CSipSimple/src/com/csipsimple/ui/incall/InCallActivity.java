@@ -910,6 +910,12 @@ public class InCallActivity extends SherlockFragmentActivity implements IOnCallA
                     }
                     break;
                 }
+                case SOUND_MUTE_ON:
+                case SOUND_MUTE_OFF:
+                	if (service != null){
+                		service.setSoundMute((whichAction ==SOUND_MUTE_ON)?true:false );
+                	}
+                	break;
                 case SPEAKER_ON:
                 case SPEAKER_OFF: {
                     if (service != null) {

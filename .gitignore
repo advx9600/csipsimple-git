@@ -16,3 +16,7 @@ CSipSimple/jni/ffmpeg/ffmpeg_src
 CSipSimple/jni/libvpx/sources
 CSipSimple/jni/openssl/sources
 CSipSimple/jni/opus/sources
+gen/
+.idea/
+.settings/
+tash

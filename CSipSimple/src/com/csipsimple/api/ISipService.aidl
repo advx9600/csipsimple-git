@@ -137,6 +137,7 @@ interface ISipService{
 	
 	//Media control
 	void setMicrophoneMute(boolean on);
+	void setSoundMute(boolean on);
 	void setSpeakerphoneOn(boolean on);
 	void setBluetoothOn(boolean on);
 	void confAdjustTxLevel(int port, float value);

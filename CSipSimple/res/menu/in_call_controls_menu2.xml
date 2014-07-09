@@ -8,9 +8,9 @@
         android:showAsAction="ifRoom"
         android:title="@string/unlock"/>
     <item
-        android:id="@+id/speakerButton"
+        android:id="@+id/soundMuteButton"
         android:checkable="true"
-        android:icon="@drawable/ic_sound_speakerphone_holo_dark"
+        android:icon="@drawable/ic_sound_speakerphone_holo_mute"
         android:showAsAction="ifRoom"
         android:title="@string/speaker"/>
     <item

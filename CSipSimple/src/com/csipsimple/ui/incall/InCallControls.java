@@ -217,9 +217,19 @@ public class InCallControls extends FrameLayout implements Callback {
             Log.d(THIS_FILE, ">> Speaker " + lastMediaState.isSpeakerphoneOn);
             enabled = callOngoing && lastMediaState.canSpeakerphoneOn;
             checked = lastMediaState.isSpeakerphoneOn;
-        }
-        btnMenuBuilder.findItem(R.id.speakerButton).setVisible(enabled).setChecked(checked);
+        }        
+//        btnMenuBuilder.findItem(R.id.speakerButton).setVisible(enabled).setChecked(checked);
         
+        Log.d(THIS_FILE, ">> SoundMute " + lastMediaState);
+        if(lastMediaState == null) {
+            enabled = callOngoing;
+            checked = false;
+        }else {
+            Log.d(THIS_FILE, ">> SoundMute " + lastMediaState.isSpeakerphoneOn);
+            enabled = callOngoing && lastMediaState.canSoundMute;
+            checked = lastMediaState.isSoundMute;
+        }   
+        btnMenuBuilder.findItem(R.id.soundMuteButton).setVisible(enabled).setChecked(checked);
         // Add call
 //        btnMenuBuilder.findItem(R.id.addCallButton).setVisible(supportMultipleCalls && callOngoing);
 	}
@@ -259,6 +269,13 @@ public class InCallControls extends FrameLayout implements Callback {
             return true;
         } else if (id == R.id.unlockButton){
         	dispatchTriggerEvent(IOnCallActionTrigger.UNLOCK_CMD);
+            return true;
+        }else if (id == R.id.soundMuteButton){
+        	if (item.isChecked()){
+        		dispatchTriggerEvent(IOnCallActionTrigger.SOUND_MUTE_ON);
+        	}else{
+        		dispatchTriggerEvent(IOnCallActionTrigger.SOUND_MUTE_OFF);
+        	}
             return true;
         }
         return false;

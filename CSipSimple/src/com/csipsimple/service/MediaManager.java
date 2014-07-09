@@ -72,6 +72,7 @@ public class MediaManager implements BluetoothChangeListener {
 	private boolean userWantBluetooth = false;
 	private boolean userWantSpeaker = false;
 	private boolean userWantMicrophoneMute = false;
+	private boolean userWantSoundMute=false;
 
 	private boolean restartAudioWhenRoutingChange = true;
 	private Intent mediaStateChangedIntent;
@@ -497,16 +498,26 @@ public class MediaManager implements BluetoothChangeListener {
 		userWantBluetooth = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_BLUETOOTH);
 		userWantSpeaker = service.getPrefs().getPreferenceBooleanValue(SipConfigManager.AUTO_CONNECT_SPEAKER);
 		userWantMicrophoneMute = false;
+		userWantSoundMute = false;
 	}
 
 
 	public void toggleMute() throws SameThreadException {
 		setMicrophoneMute(!userWantMicrophoneMute);
+		setSoundMute(!userWantSoundMute);
 	}
 	
 	public void setMicrophoneMute(boolean on) {
 		if(on != userWantMicrophoneMute ) {
 			userWantMicrophoneMute = on;
+			setSoftwareVolume();
+			broadcastMediaChanged();
+		}
+	}
+	
+	public void setSoundMute(boolean on) {
+		if(on != userWantSoundMute ) {
+			userWantSoundMute = on;
 			setSoftwareVolume();
 			broadcastMediaChanged();
 		}
@@ -547,6 +558,9 @@ public class MediaManager implements BluetoothChangeListener {
 		mediaState.isMicrophoneMute = userWantMicrophoneMute;
 		mediaState.canMicrophoneMute = true; /*&& !mediaState.isBluetoothScoOn*/ //Compatibility.isCompatible(5);
 		
+		// Sound mute
+		mediaState.isSoundMute = userWantSoundMute;
+		mediaState.canSoundMute= true;
 		// Speaker
 		mediaState.isSpeakerphoneOn = userWantSpeaker;
 		mediaState.canSpeakerphoneOn = true && !mediaState.isBluetoothScoOn; //Compatibility.isCompatible(5);
@@ -575,7 +589,7 @@ public class MediaManager implements BluetoothChangeListener {
 			String speaker_key = useBT ? SipConfigManager.SND_BT_SPEAKER_LEVEL : SipConfigManager.SND_SPEAKER_LEVEL;
 			String mic_key = useBT ? SipConfigManager.SND_BT_MIC_LEVEL : SipConfigManager.SND_MIC_LEVEL;
 			
-			final float speakVolume = service.getPrefs().getPreferenceFloatValue(speaker_key);
+			final float speakVolume = userWantSoundMute? 0 : service.getPrefs().getPreferenceFloatValue(speaker_key);
 			final float micVolume = userWantMicrophoneMute? 0 : service.getPrefs().getPreferenceFloatValue(mic_key);
 			
 			service.getExecutor().execute(new SipRunnable() {
@@ -643,6 +657,10 @@ public class MediaManager implements BluetoothChangeListener {
 		return userWantMicrophoneMute;
 	}
 
+	public boolean doesUserWantSoundMute(){
+		return userWantSoundMute;
+	}
+	
     public boolean doesUserWantBluetooth() {
         return userWantBluetooth;
     }

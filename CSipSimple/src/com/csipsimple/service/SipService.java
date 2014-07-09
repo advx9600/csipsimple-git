@@ -496,6 +496,20 @@ public class SipService extends Service {
 			});
 		}
 
+		 /**
+         * {@inheritDoc}
+         */
+		@Override
+		public void setSoundMute(final boolean on) throws RemoteException {
+			SipService.this.enforceCallingOrSelfPermission(SipManager.PERMISSION_USE_SIP, null);
+			getExecutor().execute(new SipRunnable() {
+				@Override
+				protected void doRun() throws SameThreadException {
+					pjService.setSoundMute(on);
+				}
+			});
+		}
+		
         /**
          * {@inheritDoc}
          */
