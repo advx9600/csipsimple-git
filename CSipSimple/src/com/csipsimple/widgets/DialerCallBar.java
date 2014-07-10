@@ -122,9 +122,7 @@ public class DialerCallBar extends LinearLayout implements OnClickListener, OnLo
             if (viewId == R.id.dialVideoButton) {
                 actionListener.placeVideoCall();
             }else if(viewId == R.id.dialButton) {
-            	// 普通拨号变为视频拨号
-//                actionListener.placeCall();
-                actionListener.placeVideoCall();
+                actionListener.placeCall();                
             }else if(viewId == R.id.deleteButton) {
                 actionListener.deleteChar();
             }
