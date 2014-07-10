@@ -137,7 +137,7 @@ public class PreferencesWrapper {
 		put(SipConfigManager.DIAL_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
 		put(SipConfigManager.DIAL_PRESS_VIBRATE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
         put(SipConfigManager.DTMF_PRESS_TONE_MODE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
-        put(SipConfigManager.UNLOCKER_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_AUTO));
+        put(SipConfigManager.UNLOCKER_TYPE, Integer.toString(SipConfigManager.GENERIC_TYPE_PREVENT));
 		
 		put(SipConfigManager.DEFAULT_CALLER_ID, "");
 		put(SipConfigManager.THEME, "");
