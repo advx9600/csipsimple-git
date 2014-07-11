@@ -16,4 +16,6 @@
      <!-- 需要重新定义 -->
      <dimen name="call_video_width">850dip</dimen>
      <dimen name="btn_in_call_answer_controls_height">200dip</dimen>
+     <!-- 越小显示菜单Item显示越多 -->
+     <dimen name="incall_controls_veritcal_width_limit">400dip</dimen> 
 </resources>

@@ -117,20 +117,18 @@ public class ActionMenuView extends IcsLinearLayout implements
 			mFormatItemsWidth = widthSize;
 			mMenu.onItemsChanged(true);
 		}
-
-		if (mIsSetVerticalLayout && mFormatItems) {
-			super.onMeasure(100,100); // must add this, it's weired
-			this.setMeasuredDimension(MeasureSpec.getSize( widthMeasureSpec),MeasureSpec.getSize( heightMeasureSpec));
-			return;
-		}
 		
 		if (mFormatItems) {
-			onMeasureExactFormat(widthMeasureSpec, heightMeasureSpec);
+			if (mIsSetVerticalLayout){
+				onMeasureExactFormat2(widthMeasureSpec, heightMeasureSpec);
+			}else{
+				onMeasureExactFormat(widthMeasureSpec, heightMeasureSpec);
+			}			
 		} else {
 			super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		}
 	}
-
+		
 	private void onMeasureExactFormat(int widthMeasureSpec,
 			int heightMeasureSpec) {
 		// We already know the width mode is EXACTLY if we're here.
@@ -376,6 +374,34 @@ public class ActionMenuView extends IcsLinearLayout implements
 		// UNUSED mMeasuredExtraWidth = cellsRemaining * cellSize;
 	}
 
+	private int mDefaultVerticalChildHeight=100;
+	public void setDefaultVerticalChildHeight(int width){
+		mDefaultVerticalChildHeight = width;
+	}
+	private void onMeasureExactFormat2(int widthMeasureSpec,
+			int heightMeasureSpec) {
+		// We already know the width mode is EXACTLY if we're here.
+		
+		final int childCount = getChildCount();
+		for (int i = 0; i < childCount; i++) {
+			final View child = getChildAt(i);
+			if (child.getVisibility() == GONE)
+				continue;
+
+			final LayoutParams lp = (LayoutParams) child.getLayoutParams();
+			lp.expanded = false;
+			lp.extraPixels = 0;
+			lp.cellsUsed = 0;
+			lp.expandable = false;
+			lp.leftMargin = 0;
+			lp.rightMargin = 0;
+			child.measure(0, mDefaultVerticalChildHeight);
+		}
+		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+		setMeasuredDimension(widthSize, heightSize);
+	}
+	
 	/**
 	 * Measure a child view to fit within cell-based formatting. The child's
 	 * width will be measured to a whole multiple of cellSize.
@@ -461,17 +487,40 @@ public class ActionMenuView extends IcsLinearLayout implements
 				}
 
 				LayoutParams p = (LayoutParams) v.getLayoutParams();
-				if (false /*p.isOverflowButton*/) {
-					overflowHeight = v.getMeasuredHeight();
+				if (p.isOverflowButton) {
+					int height =overflowHeight= v.getMeasuredHeight();
+					
+					int r = getWidth()-getPaddingRight()-p.rightMargin;
+					int l = getPaddingLeft()+p.leftMargin;										
+					int b = getHeight()-getPaddingTop()-p.bottomMargin;
+					int t = b-height-p.topMargin;
+					v.layout(l, t, r, b);
+
+					heightRemaining -= overflowHeight-p.bottomMargin-p.topMargin;
+					hasOverflow = true;
 				} else {
-					final int size = v.getMeasuredHeight() + p.topMargin
-							+ p.bottomMargin;
-					heightRemaining -= size;
+//					final int size = v.getMeasuredHeight() + p.topMargin
+//							+ p.bottomMargin;
+//					heightRemaining -= size;
 					nonOverflowCount++;
 				}
 			}
 			
-//			final int spacerSize=0;
+//			if (childCount == 1 && !hasOverflow) {
+//				// Center a single child
+//				final View v = getChildAt(0);
+//				final int width = v.getMeasuredWidth();
+//				final int height = v.getMeasuredHeight();
+//				final int midHorizontal = (right - left) / 2;
+//				final int l = midHorizontal - width / 2;
+//				final int t = midVertical - height / 2;
+//				v.layout(l, t, l + width, t + height);
+//				return;
+//			}
+			
+//			final int spacerCount = nonOverflowCount - (hasOverflow ? 0 : 1);
+//			final int spacerSize = Math.max(0, spacerCount > 0 ? heightRemaining/ spacerCount : 0);
+			
 			int startTop = getPaddingTop();
 			for (int i = 0; i < childCount; i++) {
 				final View v = getChildAt(i);
@@ -481,11 +530,12 @@ public class ActionMenuView extends IcsLinearLayout implements
 				}
 				
 				startTop += lp.topMargin;
-				int startLeft=this.getPaddingLeft()+lp.leftMargin;
-				int width = this.getMeasuredWidth()-lp.leftMargin;
-				int height = (this.getMeasuredHeight()-lp.topMargin-lp.bottomMargin)/nonOverflowCount;
-				v.layout(startLeft, startTop, startLeft + width, startTop + height);
-				startTop += height;
+				int startLeft=getPaddingLeft()+lp.leftMargin;
+				int endRight = getWidth()-getPaddingRight()-lp.rightMargin;
+				int height = (heightRemaining)/nonOverflowCount-lp.topMargin-lp.bottomMargin;
+				
+				v.layout(startLeft, startTop, endRight, startTop + height);
+				startTop += height+lp.bottomMargin;
 			}
 			return;
 		}
