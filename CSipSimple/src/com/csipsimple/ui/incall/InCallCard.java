@@ -214,7 +214,7 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                     lp.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
                     lp.addRule(RelativeLayout.ALIGN_RIGHT, RelativeLayout.TRUE);
                     lp.addRule(RelativeLayout.ALIGN_TOP, RelativeLayout.TRUE);
-                    lp.addRule(RelativeLayout.ABOVE, R.id.call_action_bar);
+                    lp.addRule(RelativeLayout.ABOVE, R.id.end_call_bar);
                     renderView.setLayoutParams(lp);
                     container.addView(renderView, 0);
 
@@ -561,20 +561,12 @@ public class InCallCard extends FrameLayout implements OnClickListener, Callback
                     // Flag we'd like high res loading
                     lci.callerInfo.contactContentUri = lci.callerInfo.contactContentUri.buildUpon().appendQueryParameter(ContactsAsyncHelper.HIGH_RES_URI_PARAM, "1").build();
                 }
-                if (lci.target.sipHomeData.isDoorMachine()){
-                	// cancel photo update because video immediately
-                	ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(
-                            lci.target.getContext(),
-                            new ImageView(lci.target.getContext()), // or null?
-                            lci.callerInfo,
-                            R.drawable.ic_contact_picture_180_holo_light);
-                }else{
-                	ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(
-                            lci.target.getContext(),
-                            lci.target.photo,
-                            lci.callerInfo,
-                            R.drawable.ic_contact_picture_180_holo_light);
-                }                
+                
+                ContactsAsyncHelper.updateImageViewWithContactPhotoAsync(
+                           lci.target.getContext(),
+                           lci.target.photo,
+                           lci.callerInfo,
+                           R.drawable.ic_contact_picture_180_holo_light);
                 lci.target.remoteName.setText(lci.callerInfo.name);
                 lci.target.photo.setContentDescription(lci.callerInfo.name);
             }
