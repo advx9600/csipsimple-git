@@ -199,15 +199,7 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
         // Async check
         asyncSanityChecker = new Thread() {
             public void run() {
-                asyncSanityCheck();
-                
-                /* may be a bug of ActionBarSherlock that menu can't show at first boot */
-                try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                asyncSanityCheck();                
             };
         };
         asyncSanityChecker.start();
@@ -232,14 +224,24 @@ public class SipHome extends SherlockFragmentActivity implements OnWarningChange
 //            };
 //        };
 //        asyncRebootSipSimple.start();
-        try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//        try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     }
 
+    @Override
+    public void supportInvalidateOptionsMenu() {
+        mViewPager.post(new Runnable() {
+
+            @Override
+            public void run() {
+                SipHome.super.supportInvalidateOptionsMenu();
+            }
+        });
+    }
     /**
      * This is a helper class that implements the management of tabs and all
      * details of connecting a ViewPager with associated TabHost. It relies on a
