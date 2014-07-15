@@ -27,12 +27,19 @@
 #include <pj/rand.h>
 #include <pj/string.h>	    /* pj_memset() */
 
+#include <speex/speex_preprocess.h>
+
 #define AEC_TAIL	    128	    /* default AEC length in ms */
 #define AEC_SUSPEND_LIMIT   5	    /* seconds of no activity	*/
 
 #define THIS_FILE	    "sound_port.c"
 
 //#define TEST_OVERFLOW_UNDERFLOW
+static pj_bool_t pjmedia_audio_use_speex_ns = PJ_TRUE;
+#define MY_SAVE_FILE_BEFORE_SPEEX 0
+#define MY_SAVE_FILE_SEND 0
+static FILE* fd_save;
+static FILE* fd_bfspeex;
 
 struct pjmedia_snd_port
 {
@@ -61,6 +68,8 @@ struct pjmedia_snd_port
     pj_bool_t		 ec_suspended;
     unsigned		 ec_suspend_count;
     unsigned		 ec_suspend_limit;
+
+    SpeexPreprocessState *speex_st;
 };
 
 /*
@@ -144,6 +153,17 @@ static pj_status_t rec_cb(void *user_data, pjmedia_frame *frame)
 	pjmedia_echo_capture(snd_port->ec_state, (pj_int16_t*) frame->buf, 0);
     }
 
+#ifdef MY_SAVE_FILE_BEFORE_SPEEX
+	fwrite(frame->buf,1,frame->size,fd_bfspeex);
+#endif
+    if (pjmedia_audio_use_speex_ns == PJ_TRUE){
+	speex_preprocess_run(snd_port->speex_st, frame->buf);
+        //PJ_LOG(5,(THIS_FILE, "frame->size:%d",frame->size));
+#ifdef MY_SAVE_FILE_SEND
+	fwrite(frame->buf,1,frame->size,fd_save);
+#endif
+    }
+
     pjmedia_port_put_frame(port, frame);
 
 
@@ -201,6 +221,7 @@ PJ_DEF(void) pjmedia_snd_port_param_default(pjmedia_snd_port_param *prm)
 static pj_status_t start_sound_device( pj_pool_t *pool,
 				       pjmedia_snd_port *snd_port )
 {
+    int i;float f;
     pjmedia_aud_rec_cb snd_rec_cb;
     pjmedia_aud_play_cb snd_play_cb;
     pjmedia_aud_param param_copy;
@@ -307,6 +328,55 @@ static pj_status_t start_sound_device( pj_pool_t *pool,
 	snd_port->aud_stream = NULL;
 	return status;
     }
+
+	if (pjmedia_audio_use_speex_ns == PJ_TRUE)
+                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:true"));
+                else
+                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:false"));
+                if (pjmedia_audio_use_speex_ns == PJ_TRUE){
+                        if (snd_port->speex_st){
+                PJ_LOG(4,(THIS_FILE, "speex noise suppress destroy"));
+                speex_preprocess_state_destroy(snd_port->speex_st);
+#ifdef MY_SAVE_FILE_SEND
+		fclose(fd_save);
+#endif
+
+#ifdef MY_SAVE_FILE_BEFORE_SPEEX
+		fclose(fd_bfspeex);
+#endif
+                        }
+                        PJ_LOG(4,(THIS_FILE, "speex noise suppress start"));
+      snd_port->speex_st =speex_preprocess_state_init(snd_port->samples_per_frame,snd_port->clock_rate);
+#ifdef MY_SAVE_FILE_SEND
+      fd_save = fopen("/sdcard/send_data.pcm","wb");
+      if (fd_save == NULL) PJ_LOG(1,(THIS_FILE, "open /sdcard/send_data.pcm failed!"));
+#endif
+
+#ifdef MY_SAVE_FILE_BEFORE_SPEEX
+      fd_bfspeex = fopen("/sdcard/send_data_bfspeex.pcm","wb");
+      if (fd_bfspeex == NULL) PJ_LOG(1,(THIS_FILE, "open /sdcard/send_data_bfspeex.pcm failed!"));
+#endif
+      i=1;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_DENOISE, &i);
+      i=0;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_AGC, &i);
+      i=8000;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_AGC_LEVEL, &i);
+      i=0;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_DEREVERB, &i);
+      f=.0;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_DEREVERB_DECAY, &f);
+      f=.0;
+      speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_DEREVERB_LEVEL, &f);
+	#if 0
+	int vad = 1;   
+	int vadProbStart = 80;   
+	int vadProbContinue = 65;   
+	speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_VAD, &vad); //静音检测   
+	speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_PROB_START , &vadProbStart); //Set probability required for the VAD to go from silence to voice    
+	speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_PROB_CONTINUE, &vadProbContinue);
+	#endif
+		}
 
     return PJ_SUCCESS;
 }
