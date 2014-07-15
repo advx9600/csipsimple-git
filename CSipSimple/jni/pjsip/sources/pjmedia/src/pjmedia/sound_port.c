@@ -159,10 +159,10 @@ static pj_status_t rec_cb(void *user_data, pjmedia_frame *frame)
     if (pjmedia_audio_use_speex_ns == PJ_TRUE){
 	speex_preprocess_run(snd_port->speex_st, frame->buf);
         //PJ_LOG(5,(THIS_FILE, "frame->size:%d",frame->size));
+    }
 #ifdef MY_SAVE_FILE_SEND
 	fwrite(frame->buf,1,frame->size,fd_save);
 #endif
-    }
 
     pjmedia_port_put_frame(port, frame);
 
@@ -329,33 +329,31 @@ static pj_status_t start_sound_device( pj_pool_t *pool,
 	return status;
     }
 
-	if (pjmedia_audio_use_speex_ns == PJ_TRUE)
-                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:true"));
-                else
-                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:false"));
-                if (pjmedia_audio_use_speex_ns == PJ_TRUE){
-                        if (snd_port->speex_st){
-                PJ_LOG(4,(THIS_FILE, "speex noise suppress destroy"));
-                speex_preprocess_state_destroy(snd_port->speex_st);
 #ifdef MY_SAVE_FILE_SEND
-		fclose(fd_save);
-#endif
-
-#ifdef MY_SAVE_FILE_BEFORE_SPEEX
-		fclose(fd_bfspeex);
-#endif
-                        }
-                        PJ_LOG(4,(THIS_FILE, "speex noise suppress start"));
-      snd_port->speex_st =speex_preprocess_state_init(snd_port->samples_per_frame,snd_port->clock_rate);
-#ifdef MY_SAVE_FILE_SEND
+      if (fd_save !=NULL)
+	fclose(fd_save);
       fd_save = fopen("/sdcard/send_data.pcm","wb");
       if (fd_save == NULL) PJ_LOG(1,(THIS_FILE, "open /sdcard/send_data.pcm failed!"));
 #endif
 
 #ifdef MY_SAVE_FILE_BEFORE_SPEEX
+      if (fd_bfspeex != NULL)
+	fclose(fd_bfspeex);
       fd_bfspeex = fopen("/sdcard/send_data_bfspeex.pcm","wb");
       if (fd_bfspeex == NULL) PJ_LOG(1,(THIS_FILE, "open /sdcard/send_data_bfspeex.pcm failed!"));
 #endif
+
+	if (pjmedia_audio_use_speex_ns == PJ_TRUE)
+                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:true"));
+	else
+                        PJ_LOG(4,(THIS_FILE,"pjmedia_audio_use_speex_ns:false"));
+                if (pjmedia_audio_use_speex_ns == PJ_TRUE){
+                        if (snd_port->speex_st){
+                PJ_LOG(4,(THIS_FILE, "speex noise suppress destroy"));
+                speex_preprocess_state_destroy(snd_port->speex_st);
+                        }
+                        PJ_LOG(4,(THIS_FILE, "speex noise suppress start"));
+      snd_port->speex_st =speex_preprocess_state_init(snd_port->samples_per_frame,snd_port->clock_rate);
       i=1;
       speex_preprocess_ctl(snd_port->speex_st, SPEEX_PREPROCESS_SET_DENOISE, &i);
       i=0;
