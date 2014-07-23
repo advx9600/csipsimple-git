@@ -3,7 +3,16 @@
 ###########
 TOOLCHAIN_PATH:=$(call my-dir)
 LOCAL_PATH := $(TOOLCHAIN_PATH)/../../sources/pjmedia
+
 include $(CLEAR_VARS)
+LOCAL_MODULE    := audio_df
+LOCAL_SRC_FILES := libaudio_df.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+
+include $(CLEAR_VARS)
+
+LOCAL_STATIC_LIBRARIES := audio_df
 
 LOCAL_MODULE    := pjmedia
 
